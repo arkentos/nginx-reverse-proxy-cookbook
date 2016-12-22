@@ -1,0 +1,71 @@
+<% require 'kitchen-sync' %>
+---
+
+driver:
+  name: docker
+  privileged: true
+  publish_all: true
+  use_sudo: false
+  require_chef_omnibus: false
+  dns:
+    - 8.8.8.8
+    - 8.8.4.4
+
+provisioner:
+  name: chef_solo
+  solo_rb:
+    ssl_verify_mode: verify_peer
+  cookbooks_path: 
+    - ../cookbooks
+
+platforms:
+  - name: centos-7.2
+    driver_config:
+      image: centos:7
+      platform: rhel
+      run_command: /usr/lib/systemd/systemd
+      provision_command:
+        - /bin/yum install -y initscripts net-tools wget
+        - curl -L https://www.opscode.com/chef/install.sh | bash
+
+suites:
+  - name: web_1
+    driver_config:
+      instance_name: web-1
+      forward:
+        - 8091:80
+    run_list:
+      - recipe[apache_web::default]
+    attributes:
+      apache_web:
+        instance_name: web-1
+  - name: web_2
+    driver_config:
+      instance_name: web-2
+      forward:
+        - 8092:80
+    run_list:
+      - recipe[apache_web::default]
+    attributes:
+      apache_web:
+        instance_name: web-2
+  - name: web_3
+    driver_config:
+      instance_name: web-3 
+      forward:
+        - 8093:80
+    run_list:
+      - recipe[apache_web::default]
+    attributes:
+      apache_web:
+        instance_name: web-3
+  - name: web_4
+    driver_config: 
+      instance_name: web-4
+      forward:
+        - 8094:80
+    run_list:
+      - recipe[apache_web::default]
+    attributes:
+      apache_web:
+        instance_name: web-4

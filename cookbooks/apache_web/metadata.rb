@@ -1,0 +1,7 @@
+name 'apache_web'
+maintainer 'Anowar'
+maintainer_email 'anowar_islam@intuit.com'
+license 'all_rights'
+description 'Installs/Configures apache'
+long_description 'Installs/Configures apache'
+version '0.1.0'
